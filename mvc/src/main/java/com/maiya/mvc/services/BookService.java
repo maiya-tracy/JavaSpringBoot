@@ -40,6 +40,15 @@ public class BookService {
 		br.save(currentBook);
 		return currentBook;
 	}
+	public Book updateBook(Long id, Book book) {
+		Book currentBook = br.findById(id).get();
+		currentBook.setTitle(book.getTitle());
+		currentBook.setDescription(book.getDescription());
+		currentBook.setLanguage(book.getLanguage());
+		currentBook.setNumberOfPages(book.getNumberOfPages());
+		br.save(currentBook);
+		return currentBook;
+	}
 	public void deleteBook(Long id) {
 		br.deleteById(id);
 	}
