@@ -1,6 +1,7 @@
 package com.maiya.studentRoster.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -32,12 +35,19 @@ public class Student {
 	private String last_name;
 	@NotNull
 	private Integer age;
-	@OneToOne(mappedBy="student", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Address address;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="dorm_id")
+	@JoinColumn(name = "dorm_id")
 	private Dorm dorm;
-	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "students_courses", 
+			joinColumns = @JoinColumn(name = "student_id"), 
+			inverseJoinColumns = @JoinColumn(name = "course_id")
+	)
+	private List<Course> courses;
+
 	// This will not allow the createdAt column to be updated after creation
 	@Column(updatable = false)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -49,19 +59,25 @@ public class Student {
 	}
 
 	public Student(@Size(min = 2, max = 200) String first_name, @Size(min = 2, max = 200) String last_name,
-			@NotNull Integer age, Address address, Dorm dorm) {
-		super();
+			@NotNull Integer age, Address address, Dorm dorm, List<Course> courses) {
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.age = age;
 		this.address = address;
 		this.dorm = dorm;
+		this.courses = courses;
 	}
-
 
 	// getters and setters
 
+	public List<Course> getCourses() {
+		return courses;
+	}
 
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+	
 	public Dorm getDorm() {
 		return dorm;
 	}
@@ -69,7 +85,7 @@ public class Student {
 	public void setDorm(Dorm dorm) {
 		this.dorm = dorm;
 	}
-	
+
 	public Address getAddress() {
 		return address;
 	}
@@ -77,7 +93,7 @@ public class Student {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -137,4 +153,6 @@ public class Student {
 	protected void onUpdate() {
 		this.updatedAt = new Date();
 	}
+
+
 }

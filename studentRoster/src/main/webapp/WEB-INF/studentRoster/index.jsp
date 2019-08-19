@@ -21,7 +21,8 @@
 		<div>
 			<a class="btn btn-outline-info" href="/student/new">New Student</a> <a
 				class="btn btn-outline-info" href="/contact/new">New Contact</a> <a
-				class="btn btn-outline-info" href="/dorm/new">New Dorm</a>
+				class="btn btn-outline-info" href="/dorm/new">New Dorm</a> <a
+				class="btn btn-outline-info" href="/class/new">New Class</a>
 		</div>
 
 
@@ -34,6 +35,7 @@
 					<th>Address</th>
 					<th>City</th>
 					<th>State</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -44,6 +46,7 @@
 						<td><c:out value="${student.address.address}" /></td>
 						<td><c:out value="${student.address.city}" /></td>
 						<td><c:out value="${student.address.state}" /></td>
+						<td><a class="btn btn-outline-info" href="/student/${student.id}">View Student</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>

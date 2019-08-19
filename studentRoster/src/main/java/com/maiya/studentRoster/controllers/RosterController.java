@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.maiya.studentRoster.models.Address;
+import com.maiya.studentRoster.models.Course;
 import com.maiya.studentRoster.models.Dorm;
 import com.maiya.studentRoster.models.Student;
+import com.maiya.studentRoster.models.StudentCourse;
 import com.maiya.studentRoster.services.RosterService;
 
 @Controller
@@ -47,11 +49,13 @@ public class RosterController {
 //	******************
 //	show one student
 //	******************
-	@GetMapping("/students/{id}")
+	@GetMapping("/student/{id}")
 	public String show(Model model, @PathVariable("id") Long id) {
 		Student student = rs.findStudent(id);
 		model.addAttribute("student", student);
-		return "/WEB-INF/studentRoster/show.jsp";
+		List<Course> courses = rs.allCourses();
+		model.addAttribute("courses", courses);
+		return "/WEB-INF/studentRoster/showOneStudent.jsp";
 	}
 
 //	******************
@@ -181,7 +185,67 @@ public class RosterController {
 			return "redirect:/dorms";
 		}
 	}
+	
+	
+//	******************
+//	add course
+//	******************
+	@GetMapping("/class/new")
+	public String newCourse(@ModelAttribute("course") Course course) {
+		return "/WEB-INF/studentRoster/newcourse.jsp";
+	}
 
+	@PostMapping(value = "/classes")
+	public String create(@Valid @ModelAttribute("course") Course course, BindingResult result) {
+		if (result.hasErrors()) {
+			return "/WEB-INF/studentRoster/newcourse.jsp";
+		} else {
+			rs.createCourse(course);
+			return "redirect:/students";
+		}
+	}
+	
+//	******************
+//	show one course
+//	******************
+	@GetMapping("/classes/{id}")
+	public String showOneCourse(Model model, @PathVariable("id") Long id) {
+		Course course = rs.findCourse(id);
+		model.addAttribute("course", course);
+		List<Student> students = rs.allStudents();
+		model.addAttribute("students", students);
+		return "/WEB-INF/studentRoster/showOneCourse.jsp";
+	}
+
+//	******************
+//	add students to one course
+//	******************
+
+	@PostMapping(value = "/classes/addStudent")
+	public String updateCourse(HttpServletRequest request) {
+		Long student_id = Long.parseLong(request.getParameter("stu_id"));
+		Student current_student = rs.findStudent(student_id);
+		Long course_id = Long.parseLong(request.getParameter("course_id"));
+		Course current_course = rs.findCourse(course_id);
+		StudentCourse new_student_course = new StudentCourse(current_student, current_course);
+		rs.addCourseToStudent(new_student_course);
+		return "redirect:/student/" + student_id;
+	}
+	
+//	******************
+//	remove students from one course
+//	******************
+
+	@PostMapping(value = "/classes/removeStudent")
+	public String updateCourseRemove(HttpServletRequest request) {
+		Long student_id = Long.parseLong(request.getParameter("stu_id"));
+		Student current_student = rs.findStudent(student_id);
+		Long course_id = Long.parseLong(request.getParameter("course_id"));
+		Course current_course = rs.findCourse(course_id);
+		rs.removeCourseFromStudent(current_student, current_course);
+		return "redirect:/student/" + student_id;
+	}
+	
 //	******************
 //    delete student
 //	******************

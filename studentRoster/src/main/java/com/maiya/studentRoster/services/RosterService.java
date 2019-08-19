@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maiya.studentRoster.models.Address;
+import com.maiya.studentRoster.models.Course;
 import com.maiya.studentRoster.models.Dorm;
 import com.maiya.studentRoster.models.Student;
+import com.maiya.studentRoster.models.StudentCourse;
 import com.maiya.studentRoster.repositories.AddressRepository;
+import com.maiya.studentRoster.repositories.CourseRepository;
 import com.maiya.studentRoster.repositories.DormRepository;
+import com.maiya.studentRoster.repositories.StudentCourseRepository;
 import com.maiya.studentRoster.repositories.StudentRepository;
 
 
@@ -143,13 +147,54 @@ public class RosterService {
 		dr.save(currentDorm);
 		return currentDorm;
 	}
-//	public Dorm updateDorm(Long dorm_id, Long student_id) {
-//		Student current_student = sr.findById(student_id).get();
-//		Dorm currentDorm = dr.findById(dorm_id).get();
-//		current_student.setDorm(currentDorm);
-//		return currentDorm;
-//	}
 	public void deleteDorm(Long id) {
 		dr.deleteById(id);
 	}
+	
+	
+	
+//	Courses
+	
+	@Autowired
+	CourseRepository cr;
+	
+	// returns all the courses
+	public List<Course> allCourses() {
+		return cr.findAll();
+	}
+	// creates a course
+	public Course createCourse(Course b) {
+		return cr.save(b);
+	}
+	// retrieves a course
+	public Course findCourse(Long id) {
+		Optional<Course> optionalCourse = cr.findById(id);
+		if(optionalCourse.isPresent()) { 
+			return optionalCourse.get();
+		} else {
+			return null;
+		}
+	}
+	public void deleteCourse(Long id) {
+		cr.deleteById(id);
+	}
+	public List<Course> studentCourses(Student student) {
+		// TODO Auto-generated method stub
+		return student.getCourses();
+	}
+	
+	@Autowired
+	StudentCourseRepository scr;
+	
+	public StudentCourse addCourseToStudent(StudentCourse new_student_course) {
+		// TODO Auto-generated method stub
+		return scr.save(new_student_course);
+	}
+	public void removeCourseFromStudent(Student current_student, Course current_course) {
+		// TODO Auto-generated method stub
+		List<Course> student_classes = current_student.getCourses();
+		student_classes.remove(current_course);
+		createStudent(current_student);
+	}
+
 }
