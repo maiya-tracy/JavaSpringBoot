@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -32,6 +34,9 @@ public class Student {
 	private Integer age;
 	@OneToOne(mappedBy="student", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Address address;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="dorm_id")
+	private Dorm dorm;
 	
 	// This will not allow the createdAt column to be updated after creation
 	@Column(updatable = false)
@@ -44,17 +49,27 @@ public class Student {
 	}
 
 	public Student(@Size(min = 2, max = 200) String first_name, @Size(min = 2, max = 200) String last_name,
-			@NotNull Integer age, Address address) {
+			@NotNull Integer age, Address address, Dorm dorm) {
 		super();
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.age = age;
 		this.address = address;
+		this.dorm = dorm;
 	}
 
 
 	// getters and setters
 
+
+	public Dorm getDorm() {
+		return dorm;
+	}
+
+	public void setDorm(Dorm dorm) {
+		this.dorm = dorm;
+	}
+	
 	public Address getAddress() {
 		return address;
 	}

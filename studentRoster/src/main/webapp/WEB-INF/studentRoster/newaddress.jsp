@@ -14,33 +14,36 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>New Address</h1>
-	<form:form action="/contacts" method="post" modelAttribute="contact">
-		<p>
-			<form:label path="student">Student</form:label>
-			<form:errors path="student" />
-			<form:select class="form-control" path="student">
-				<c:forEach items="${students}" var="student">
-					<option value="${student.id}">${student.first_name} ${student.last_name}</option>
-				</c:forEach>
-			</form:select>
-		</p>
-		<p>
-			<form:label path="address">Address</form:label>
-			<form:errors path="address" />
-			<form:input path="address" />
-		</p>
-		<p>
-			<form:label path="city">City</form:label>
-			<form:errors path="city" />
-			<form:input path="city" />
-		</p>
-		<p>
-			<form:label path="state">State</form:label>
-			<form:errors path="state" />
-			<form:input path="state" />
-		</p>
-		<input type="submit" value="Submit" />
-	</form:form>
+	<div class="container">
+		<h1>New Address</h1>
+		<form:form action="/contacts" method="post" modelAttribute="contact">
+			<p>
+				<form:label path="student">Student</form:label>
+				<form:errors path="student" />
+				<form:select class="form-control" path="student">
+					<c:forEach items="${students}" var="student">
+						<option value="${student.id}">${student.first_name}
+							${student.last_name}</option>
+					</c:forEach>
+				</form:select>
+			</p>
+			<p>
+				<form:label path="address">Address</form:label>
+				<form:errors path="address" />
+				<form:input path="address" />
+			</p>
+			<p>
+				<form:label path="city">City</form:label>
+				<form:errors path="city" />
+				<form:input path="city" />
+			</p>
+			<p>
+				<form:label path="state">State</form:label>
+				<form:errors path="state" />
+				<form:input path="state" />
+			</p>
+			<input type="submit" value="Submit" />
+		</form:form>
+	</div>
 </body>
 </html>

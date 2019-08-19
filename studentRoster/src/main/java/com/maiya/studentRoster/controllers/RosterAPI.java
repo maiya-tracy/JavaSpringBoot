@@ -26,7 +26,7 @@ public class RosterAPI {
 
 	@PostMapping(value = "/api/students")
 	public Student create(@RequestParam(value = "first_name") String first_name, @RequestParam(value = "last_name") String last_name, @RequestParam(value = "age") Integer age) {
-		Student student = new Student(first_name, last_name, age, null);
+		Student student = new Student(first_name, last_name, age, null, null);
 		return rs.createStudent(student);
 	}
 

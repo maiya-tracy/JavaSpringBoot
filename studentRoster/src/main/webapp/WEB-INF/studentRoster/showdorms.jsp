@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,25 +25,22 @@
 		</div>
 
 
-		<h1>All Students</h1>
+		<h1>All Dorms</h1>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Name</th>
-					<th>Age</th>
-					<th>Address</th>
-					<th>City</th>
-					<th>State</th>
+					<th>Number of Students</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${students}" var="student">
+				<c:forEach items="${dorms}" var="dorm">
 					<tr>
-						<td><c:out value="${student.first_name} ${student.last_name}" /></td>
-						<td><c:out value="${student.age}" /></td>
-						<td><c:out value="${student.address.address}" /></td>
-						<td><c:out value="${student.address.city}" /></td>
-						<td><c:out value="${student.address.state}" /></td>
+						<td><c:out value="${dorm.name}" /></td>
+						<td><c:out value="${fn:length(dorm.students)}" /></td>
+						<td><a class="btn btn-outline-warning"
+							href="/dorms/${dorm.id}">View Dorm</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>

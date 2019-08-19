@@ -3,14 +3,14 @@ package com.maiya.studentRoster.services;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maiya.studentRoster.models.Address;
+import com.maiya.studentRoster.models.Dorm;
 import com.maiya.studentRoster.models.Student;
 import com.maiya.studentRoster.repositories.AddressRepository;
+import com.maiya.studentRoster.repositories.DormRepository;
 import com.maiya.studentRoster.repositories.StudentRepository;
 
 
@@ -101,5 +101,55 @@ public class RosterService {
 	}
 	public void deleteAddress(Long id) {
 		ar.deleteById(id);
+	}
+	
+	
+	
+	
+//	Dorms
+	
+	@Autowired
+	DormRepository dr;
+	
+	// returns all the dorms
+	public List<Dorm> allDorms() {
+		return dr.findAll();
+	}
+	// creates a dorm
+	public Dorm createDorm(Dorm b) {
+		return dr.save(b);
+	}
+	// retrieves a dorm
+	public Dorm findDorm(Long id) {
+		Optional<Dorm> optionalDorm = dr.findById(id);
+		if(optionalDorm.isPresent()) { 
+			return optionalDorm.get();
+		} else {
+			return null;
+		}
+	}
+	
+	public Dorm updateDorm(Long id, String name, List<Student> students) {
+		Dorm currentDorm = dr.findById(id).get();
+		currentDorm.setName(name);
+		currentDorm.setStudents(students);
+		dr.save(currentDorm);
+		return currentDorm;
+	}
+	public Dorm updateDorm(Long id, Dorm dorm) {
+		Dorm currentDorm = dr.findById(id).get();
+		currentDorm.setName(dorm.getName());
+		currentDorm.setStudents(dorm.getStudents());
+		dr.save(currentDorm);
+		return currentDorm;
+	}
+//	public Dorm updateDorm(Long dorm_id, Long student_id) {
+//		Student current_student = sr.findById(student_id).get();
+//		Dorm currentDorm = dr.findById(dorm_id).get();
+//		current_student.setDorm(currentDorm);
+//		return currentDorm;
+//	}
+	public void deleteDorm(Long id) {
+		dr.deleteById(id);
 	}
 }
